@@ -1,4 +1,4 @@
-package go_cache
+package main
 
 // CacheType 定义缓存类型
 type CacheType string
@@ -6,10 +6,10 @@ type CacheType string
 const (
 	// RedisCacheType Redis缓存类型
 	RedisCacheType CacheType = "redis"
-	
+
 	// MemoryCacheType 内存缓存类型
 	MemoryCacheType CacheType = "memory"
-	
+
 	// FileCacheType 文件缓存类型
 	FileCacheType CacheType = "file"
 )
@@ -18,12 +18,12 @@ const (
 type CacheConfig struct {
 	// Type 缓存类型
 	Type CacheType
-	
+
 	// Redis配置
 	RedisAddr     string
 	RedisPassword string
 	RedisDB       int
-	
+
 	// File配置
 	FileDir string
 }

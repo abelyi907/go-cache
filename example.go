@@ -1,4 +1,4 @@
-package go_cache
+package main
 
 import (
 	"fmt"
@@ -159,7 +159,7 @@ func ExampleMulti() {
 	if err != nil {
 		log.Fatal("创建文件缓存失败:", err)
 	}
-	
+
 	multiCache := NewMultiCache(memoryCache, fileCache)
 	defer multiCache.Close()
 

@@ -1,4 +1,4 @@
-package go_cache
+package main
 
 import (
 	"encoding/json"
@@ -86,12 +86,12 @@ func (f *FileCache) Get(key string) (string, error) {
 // Delete 从缓存中删除指定键
 func (f *FileCache) Delete(key string) error {
 	filePath := f.getFilePath(key)
-	
+
 	// 检查文件是否存在
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		return nil // 文件不存在，认为删除成功
 	}
-	
+
 	return os.Remove(filePath)
 }
 

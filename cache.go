@@ -1,4 +1,4 @@
-package go_cache
+package main
 
 import (
 	"context"
@@ -73,17 +73,17 @@ func (r *RedisCache) TTL(key string) (time.Duration, error) {
 	if err != nil {
 		return 0, err
 	}
-	
+
 	if ttl == -1*time.Second {
 		// Redis中-1表示永不过期
 		return -1, nil
 	}
-	
+
 	if ttl == -2*time.Second {
 		// Redis中-2表示键不存在
 		return 0, ErrKeyNotFound
 	}
-	
+
 	return ttl, nil
 }
 

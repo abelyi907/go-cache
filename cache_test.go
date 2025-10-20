@@ -1,4 +1,4 @@
-package go_cache
+package main
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestRedisCache_SetAndGet(t *testing.T) {
-	cache := NewRedisCache("localhost:6379", "", 0)
+	cache := NewRedisCache("localhost:36379", "", 0)
 	defer cache.Close()
 
 	key := "test_key"

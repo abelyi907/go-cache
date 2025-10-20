@@ -1,7 +1,6 @@
 package go_cache
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -372,9 +371,4 @@ func TestUseOneCacheOfFile(t *testing.T) {
 	//	t.Error("delete cache error")
 	//}
 
-}
-
-func TestGetFilePath(t *testing.T) {
-	str := "dfdfdgfgfghfhghgjhjhjkjkjlkkll"
-	fmt.Printf("%x", str)
 }

@@ -35,10 +35,15 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultGoTemplateProperty": "Go File",
+    "Go 测试.github.com/abelyi907/go-cache 中的 TestGetFilePath.executor": "Run",
+    "Go 测试.github.com/abelyi907/go-cache 中的 TestRedisCache_SetAndGet.executor": "Run",
+    "Go 测试.github.com/abelyi907/go-cache 中的 TestUseOneCache.executor": "Run",
+    "Go 测试.github.com/abelyi907/go-cache 中的 TestUseOneCacheOfFile.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.GoLinterPluginOnboarding": "true",
     "RunOnceActivity.GoLinterPluginStorageMigration": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
@@ -53,7 +58,18 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go 测试.github.com/abelyi907/go-cache 中的 TestUseOneCacheOfFile">
+    <configuration name="github.com/abelyi907/go-cache 中的 TestGetFilePath" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-cache" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/abelyi907/go-cache" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestGetFilePath\E$" />
+      <method v="2" />
+    </configuration>
     <configuration name="github.com/abelyi907/go-cache 中的 TestRedisCache_SetAndGet" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="go-cache" />
       <working_directory value="$PROJECT_DIR$" />
@@ -65,8 +81,33 @@
       <pattern value="^\QTestRedisCache_SetAndGet\E$" />
       <method v="2" />
     </configuration>
+    <configuration name="github.com/abelyi907/go-cache 中的 TestUseOneCache" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-cache" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/abelyi907/go-cache" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestUseOneCache\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="github.com/abelyi907/go-cache 中的 TestUseOneCacheOfFile" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-cache" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/abelyi907/go-cache" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestUseOneCacheOfFile\E$" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go 测试.github.com/abelyi907/go-cache 中的 TestUseOneCacheOfFile" />
+        <item itemvalue="Go 测试.github.com/abelyi907/go-cache 中的 TestGetFilePath" />
+        <item itemvalue="Go 测试.github.com/abelyi907/go-cache 中的 TestUseOneCache" />
         <item itemvalue="Go 测试.github.com/abelyi907/go-cache 中的 TestRedisCache_SetAndGet" />
       </list>
     </recent_temporary>

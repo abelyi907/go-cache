@@ -1,17 +1,17 @@
-package main
+package go_cache
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
 
 func TestRedisCache_SetAndGet(t *testing.T) {
-	cache := NewRedisCache("localhost:36379", "", 0)
-	defer cache.Close()
+	cache := redisServer
 
 	key := "test_key"
 	value := "test_value"
-	expiration := 5 * time.Second
+	expiration := 500 * time.Second
 
 	// 测试设置键值对
 	err := cache.Set(key, value, expiration)
@@ -31,8 +31,7 @@ func TestRedisCache_SetAndGet(t *testing.T) {
 }
 
 func TestRedisCache_Delete(t *testing.T) {
-	cache := NewRedisCache("localhost:6379", "", 0)
-	defer cache.Close()
+	cache := redisServer
 
 	key := "test_delete_key"
 	value := "test_value"
@@ -58,8 +57,7 @@ func TestRedisCache_Delete(t *testing.T) {
 }
 
 func TestRedisCache_Exists(t *testing.T) {
-	cache := NewRedisCache("localhost:6379", "", 0)
-	defer cache.Close()
+	cache := redisServer
 
 	key := "test_exists_key"
 	value := "test_value"
@@ -91,8 +89,7 @@ func TestRedisCache_Exists(t *testing.T) {
 }
 
 func TestRedisCache_Expire(t *testing.T) {
-	cache := NewRedisCache("localhost:6379", "", 0)
-	defer cache.Close()
+	cache := redisServer
 
 	key := "test_expire_key"
 	value := "test_value"
@@ -290,4 +287,94 @@ func TestMultiCache_SetAndGet(t *testing.T) {
 	if got != value {
 		t.Errorf("期望值 %s, 实际值 %s", value, got)
 	}
+}
+
+func TestUseOneCacheOfRedis(t *testing.T) {
+	cc, err := NewCache(CacheConfig{
+		Type:          RedisCacheType,
+		RedisAddr:     redisUrl,
+		RedisPassword: redisPassword,
+		RedisDB:       redisDb,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+	if cc.Set("test1", "test1", time.Second*120) != nil {
+		t.Error("set cache error")
+	}
+	if cc.Set("test2", "test2", time.Second*120) != nil {
+		t.Error("set cache error")
+	}
+	rsp, err := cc.Get("test2")
+	if err != nil {
+		t.Error(err)
+	}
+	if rsp != "test2" {
+		t.Error("get cache error")
+	}
+
+	if cc.Set("test2", "test2_1", time.Second*120) != nil {
+		t.Error("set cache error")
+	}
+	rsp, err = cc.Get("test2")
+	if err != nil {
+		t.Error(err)
+	}
+	if rsp != "test2_1" {
+		t.Error("get cache error")
+	}
+
+	if cc.Delete("test2") != nil {
+		t.Error("delete cache error")
+	}
+
+}
+
+func TestUseOneCacheOfFile(t *testing.T) {
+	cc, err := NewCache(CacheConfig{
+		Type:    FileCacheType,
+		FileDir: "./test_cache",
+	})
+	if err != nil {
+		t.Error(err)
+	}
+
+	if cc.Set("test1", `{"key1":"我是key1"}`, time.Second*120) != nil {
+		t.Error("set cache error")
+	}
+	if cc.Set("test2", `{"key1":"我是key2"}`, time.Second*120) != nil {
+		t.Error("set cache error")
+	}
+	rsp, err := cc.Get("test2")
+	if err != nil {
+		t.Error(err)
+	}
+	if rsp != `{"key1":"我是key2"}` {
+		t.Error("get cache error")
+	}
+	if cc.Set("test3", "aa", time.Second*120) != nil {
+		t.Error("set cache3 error")
+	}
+
+	//
+	//if cc.Set("test2", "test2_1", time.Second*120) != nil {
+	//	t.Error("set cache error")
+	//}
+	//rsp, err = cc.Get("test2")
+	//if err != nil {
+	//	t.Error(err)
+	//}
+	//if rsp != "test2_1" {
+	//	t.Error("get cache error")
+	//}
+
+	//if cc.Delete("test2") != nil {
+	//	t.Error("delete cache error")
+	//}
+
+}
+
+func TestGetFilePath(t *testing.T) {
+	str := "dfdfdgfgfghfhghgjhjhjkjkjlkkll"
+	fmt.Printf("%x", str)
 }

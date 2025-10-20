@@ -1,7 +1,8 @@
-package main
+package go_cache
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -35,7 +36,7 @@ func (r *RedisCache) Set(key string, value interface{}, expiration time.Duration
 // Get 从缓存中获取指定键的值
 func (r *RedisCache) Get(key string) (string, error) {
 	val, err := r.client.Get(r.ctx, key).Result()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return "", ErrKeyNotFound
 	}
 	return val, err

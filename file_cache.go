@@ -1,6 +1,8 @@
-package main
+package go_cache
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -50,6 +52,12 @@ func (f *FileCache) Set(key string, value interface{}, expiration time.Duration)
 	}
 
 	filePath := f.getFilePath(key)
+	// 检查文件夹是否存在，不存在就创建
+	if _, err = os.Stat(filepath.Dir(filePath)); os.IsNotExist(err) {
+		if err = os.MkdirAll(filepath.Dir(filePath), 0755); err != nil {
+			return err
+		}
+	}
 	return os.WriteFile(filePath, data, 0644)
 }
 
@@ -205,8 +213,16 @@ func (f *FileCache) Close() error {
 
 // getFilePath 获取键对应的文件路径
 func (f *FileCache) getFilePath(key string) string {
-	// 简单的键到文件名的转换
-	// 在实际应用中，可能需要更复杂的处理来避免文件名冲突
-	filename := fmt.Sprintf("%x.json", key)
-	return filepath.Join(f.dir, filename)
+	// 使用MD5哈希确保文件名的有效性和唯一性
+	hasher := md5.New()
+	hasher.Write([]byte(key))
+	hash := hex.EncodeToString(hasher.Sum(nil))
+
+	// 按哈希的前两个字符创建子目录，避免单个目录下文件过多
+	subDir := hash[:2]
+	subDir2 := hash[2:4]
+
+	// 创建完整的文件路径
+	filename := fmt.Sprintf("%s.json", hash)
+	return filepath.Join(f.dir, subDir+"/"+subDir2, filename)
 }

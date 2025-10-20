@@ -1,4 +1,4 @@
-package main
+package go_cache
 
 // CacheType 定义缓存类型
 type CacheType string

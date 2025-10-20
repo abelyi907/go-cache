@@ -1,4 +1,4 @@
-package main
+package go_cache
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 func TestAllCacheImplementations(t *testing.T) {
 	// 测试所有缓存实现
 	caches := map[string]Cache{
-		"redis":  NewRedisCache("localhost:6379", "", 0),
+		"redis":  redisServer,
 		"memory": NewMemoryCache(),
 	}
 

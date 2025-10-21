@@ -27,6 +27,18 @@ func TestRedisCache_SetAndGet(t *testing.T) {
 	if got != value {
 		t.Errorf("期望值 %s, 实际值 %s", value, got)
 	}
+
+	tempT := CacheConfig{}
+	tempT.PrefixKey = "aaa"
+
+	err = cache.Set("type_otheraaaa", tempT, expiration)
+	if err != nil {
+		t.Fatalf("设置键值对失败: %v", err)
+	}
+	err = cache.Delete("type_otheraaaa")
+	if err != nil {
+		t.Fatalf("删除键失败: %v", err)
+	}
 }
 
 func TestRedisCache_Delete(t *testing.T) {

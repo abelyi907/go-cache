@@ -42,7 +42,7 @@ func (f *FileCache) Set(key string, value interface{}, expiration time.Duration)
 	}
 
 	item := &fileItem{
-		Value:      value.(string),
+		Value:      ToString(value),
 		Expiration: expirationTime,
 	}
 

@@ -75,14 +75,14 @@ func (r *RedisCache) TTL(key string) (time.Duration, error) {
 		return 0, err
 	}
 
-	if ttl == -1*time.Second {
+	if ttl == time.Duration(-1) {
 		// Redis中-1表示永不过期
-		return -1, nil
+		return time.Duration(-1), nil
 	}
 
-	if ttl == -2*time.Second {
+	if ttl == time.Duration(-2) {
 		// Redis中-2表示键不存在
-		return 0, ErrKeyNotFound
+		return time.Duration(-2), ErrKeyNotFound
 	}
 
 	return ttl, nil

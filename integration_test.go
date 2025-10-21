@@ -6,6 +6,7 @@ import (
 )
 
 func TestAllCacheImplementations(t *testing.T) {
+	defer clearTestFile()
 	// 测试所有缓存实现
 	caches := map[string]Cache{
 		"redis":  redisServer,
@@ -13,7 +14,7 @@ func TestAllCacheImplementations(t *testing.T) {
 	}
 
 	// 添加文件缓存（需要特殊处理）
-	fileCache, err := NewFileCache("./test_integration_cache")
+	fileCache, err := NewFileCache(testFilePath)
 	if err != nil {
 		t.Fatalf("创建文件缓存失败: %v", err)
 	}

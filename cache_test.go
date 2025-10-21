@@ -107,6 +107,11 @@ func TestRedisCache_Expire(t *testing.T) {
 		t.Fatalf("设置过期时间失败: %v", err)
 	}
 
+	err = cache.Expire("nokey", newExpiration)
+	if err == nil {
+		t.Fatalf("设置过期时间应该失败: %v", err)
+	}
+
 	// 检查TTL
 	ttl, err := cache.TTL(key)
 	if err != nil {
@@ -116,6 +121,20 @@ func TestRedisCache_Expire(t *testing.T) {
 	if ttl <= 0 {
 		t.Error("期望TTL大于0")
 	}
+
+	ttl, err = cache.TTL(`nokey`)
+	if err == nil {
+		t.Fatalf("获取TTL失败: %v", err)
+	}
+	if ttl != time.Duration(-2) {
+		t.Error("期望TTL为-2,键不存在")
+	}
+	cache.Set("haskey1", `k1`, 0)
+	ttl, err = cache.TTL("haskey1")
+	if ttl != time.Duration(-1) {
+		t.Error("期望TTL为-1,键不存在")
+	}
+
 }
 
 func TestMemoryCache_SetAndGet(t *testing.T) {
@@ -141,6 +160,34 @@ func TestMemoryCache_SetAndGet(t *testing.T) {
 	if got != value {
 		t.Errorf("期望值 %s, 实际值 %s", value, got)
 	}
+
+	var OtherCacheType CacheType = "other"
+	var types []CacheType
+	types = append(types, MemoryCacheType)
+	types = append(types, OtherCacheType)
+	for _, v := range types {
+
+		redisConfig := CacheConfig{
+			Type: v,
+		}
+		memCache, _ := NewCache(redisConfig)
+		err = memCache.Set("mkey", "mvalue", 0)
+		if err != nil {
+			t.Fatalf("设置内容键值对失败: %v", err)
+		}
+		got, err = memCache.Get("mkey")
+		if err != nil {
+			t.Fatalf("获取内容键值对失败: %v", err)
+		}
+		if got != "mvalue" {
+			t.Errorf("期望值 %s, 获取值 %s", "mvalue", got)
+		}
+
+		// 测试获取键值对
+	}
+
+	//默认内存方式
+
 }
 
 func TestMemoryCache_Delete(t *testing.T) {
@@ -201,10 +248,20 @@ func TestMemoryCache_Exists(t *testing.T) {
 	if !exists {
 		t.Error("期望键存在，但检查结果为不存在")
 	}
+
+	exists, err = cache.Exists("no_key22")
+	if err != nil {
+		t.Error("期望键不存在，但检查错误")
+	}
+	if exists != false {
+		t.Error("期望键不存在，但检查结果为存在")
+	}
+
 }
 
 func TestFileCache_SetAndGet(t *testing.T) {
-	cache, err := NewFileCache("./test_cache")
+	defer clearTestFile()
+	cache, err := NewFileCache(testFilePath)
 	if err != nil {
 		t.Fatalf("创建文件缓存失败: %v", err)
 	}
@@ -232,7 +289,8 @@ func TestFileCache_SetAndGet(t *testing.T) {
 }
 
 func TestFileCache_Delete(t *testing.T) {
-	cache, err := NewFileCache("./test_cache")
+	defer clearTestFile()
+	cache, err := NewFileCache(testFilePath)
 	if err != nil {
 		t.Fatalf("创建文件缓存失败: %v", err)
 	}
@@ -260,10 +318,36 @@ func TestFileCache_Delete(t *testing.T) {
 		t.Error("期望键已被删除，但获取成功")
 	}
 }
+func TestFileCache_Expire(t *testing.T) {
+	defer clearTestFile()
+	cache, err := NewFileCache(testFilePath)
+	if err != nil {
+		t.Fatalf("创建文件缓存失败: %v", err)
+	}
+	defer cache.Close()
+
+	key := "test_delete_key"
+	//value := "test_value"
+	expiration := 5 * time.Second
+
+	// 设置键值对
+	err = cache.Expire(key, expiration)
+	if err == nil {
+		t.Fatalf("设置键有效期不应成功: %v", err)
+	}
+
+	_ = cache.Set(key, "value", expiration)
+	err = cache.Expire(key, 500*time.Second)
+	if err != nil {
+		t.Fatalf("设置键有效期应成功,但失败: %v", err.Error())
+	}
+
+}
 
 func TestMultiCache_SetAndGet(t *testing.T) {
+	defer clearTestFile()
 	memoryCache := NewMemoryCache()
-	fileCache, _ := NewFileCache("./test_cache")
+	fileCache, _ := NewFileCache(testFilePath)
 	cache := NewMultiCache(memoryCache, fileCache)
 	defer cache.Close()
 

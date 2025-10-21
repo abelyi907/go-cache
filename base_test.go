@@ -11,7 +11,7 @@ var redisDb = 0
 var testFilePath = "./test_cache"
 
 func init() {
-	redisServer = NewRedisCache(redisUrl, redisPassword, redisDb)
+	redisServer = NewRedisCache(redisUrl, redisPassword, redisDb, "gocache:")
 }
 func Init() func() {
 	clearTestFile()

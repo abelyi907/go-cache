@@ -10,12 +10,13 @@ import (
 
 // RedisCache 实现了基于Redis的缓存库
 type RedisCache struct {
-	client *redis.Client
-	ctx    context.Context
+	client    *redis.Client
+	ctx       context.Context
+	prefixKey string
 }
 
 // NewRedisCache 创建一个新的Redis缓存实例
-func NewRedisCache(addr string, password string, db int) *RedisCache {
+func NewRedisCache(addr string, password string, db int, PrefixKey string) *RedisCache {
 	client := redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: password,
@@ -23,19 +24,20 @@ func NewRedisCache(addr string, password string, db int) *RedisCache {
 	})
 
 	return &RedisCache{
-		client: client,
-		ctx:    context.Background(),
+		client:    client,
+		ctx:       context.Background(),
+		prefixKey: PrefixKey,
 	}
 }
 
 // Set 将键值对存储到缓存中，并设置过期时间
 func (r *RedisCache) Set(key string, value interface{}, expiration time.Duration) error {
-	return r.client.Set(r.ctx, key, value, expiration).Err()
+	return r.client.Set(r.ctx, r.prefixKey+key, value, expiration).Err()
 }
 
 // Get 从缓存中获取指定键的值
 func (r *RedisCache) Get(key string) (string, error) {
-	val, err := r.client.Get(r.ctx, key).Result()
+	val, err := r.client.Get(r.ctx, r.prefixKey+key).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", ErrKeyNotFound
 	}
@@ -44,12 +46,12 @@ func (r *RedisCache) Get(key string) (string, error) {
 
 // Delete 从缓存中删除指定键
 func (r *RedisCache) Delete(key string) error {
-	return r.client.Del(r.ctx, key).Err()
+	return r.client.Del(r.ctx, r.prefixKey+key).Err()
 }
 
 // Exists 检查指定键是否存在于缓存中
 func (r *RedisCache) Exists(key string) (bool, error) {
-	result, err := r.client.Exists(r.ctx, key).Result()
+	result, err := r.client.Exists(r.ctx, r.prefixKey+key).Result()
 	if err != nil {
 		return false, err
 	}
@@ -58,7 +60,7 @@ func (r *RedisCache) Exists(key string) (bool, error) {
 
 // Expire 设置键的过期时间
 func (r *RedisCache) Expire(key string, expiration time.Duration) error {
-	result, err := r.client.Expire(r.ctx, key, expiration).Result()
+	result, err := r.client.Expire(r.ctx, r.prefixKey+key, expiration).Result()
 	if err != nil {
 		return err
 	}
@@ -70,7 +72,7 @@ func (r *RedisCache) Expire(key string, expiration time.Duration) error {
 
 // TTL 获取键的剩余生存时间
 func (r *RedisCache) TTL(key string) (time.Duration, error) {
-	ttl, err := r.client.TTL(r.ctx, key).Result()
+	ttl, err := r.client.TTL(r.ctx, r.prefixKey+key).Result()
 	if err != nil {
 		return 0, err
 	}

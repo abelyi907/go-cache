@@ -26,13 +26,15 @@ type CacheConfig struct {
 
 	// File配置
 	FileDir string
+
+	PrefixKey string // 缓存key的前缀
 }
 
 // NewCache 根据配置创建缓存实例
 func NewCache(config CacheConfig) (Cache, error) {
 	switch config.Type {
 	case RedisCacheType:
-		return NewRedisCache(config.RedisAddr, config.RedisPassword, config.RedisDB), nil
+		return NewRedisCache(config.RedisAddr, config.RedisPassword, config.RedisDB, config.PrefixKey), nil
 	case MemoryCacheType:
 		return NewMemoryCache(), nil
 	case FileCacheType:

@@ -31,7 +31,7 @@ go mod tidy
 
 ## 依赖
 
-本项目依赖于 [go-redis/redis](https://github.com/go-redis/redis) v8 版本。
+本项目依赖于 [redis/go-redis](https://github.com/redis/go-redis) v9 版本。
 
 ## 使用方法
 

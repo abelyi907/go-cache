@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 // RedisCache 实现了基于Redis的缓存库

@@ -6,8 +6,8 @@ import (
 )
 
 func TestRedisCache_SetAndGet(t *testing.T) {
+	defer Init()()
 	cache := redisServer
-
 	key := "test_key"
 	value := "test_value"
 	expiration := 500 * time.Second
@@ -30,6 +30,7 @@ func TestRedisCache_SetAndGet(t *testing.T) {
 }
 
 func TestRedisCache_Delete(t *testing.T) {
+	defer Init()()
 	cache := redisServer
 
 	key := "test_delete_key"
@@ -56,6 +57,7 @@ func TestRedisCache_Delete(t *testing.T) {
 }
 
 func TestRedisCache_Exists(t *testing.T) {
+	defer Init()()
 	cache := redisServer
 
 	key := "test_exists_key"
@@ -88,6 +90,7 @@ func TestRedisCache_Exists(t *testing.T) {
 }
 
 func TestRedisCache_Expire(t *testing.T) {
+	defer Init()()
 	cache := redisServer
 
 	key := "test_expire_key"
@@ -138,6 +141,7 @@ func TestRedisCache_Expire(t *testing.T) {
 }
 
 func TestMemoryCache_SetAndGet(t *testing.T) {
+	defer Init()()
 	cache := NewMemoryCache()
 	defer cache.Close()
 
@@ -191,6 +195,7 @@ func TestMemoryCache_SetAndGet(t *testing.T) {
 }
 
 func TestMemoryCache_Delete(t *testing.T) {
+	defer Init()()
 	cache := NewMemoryCache()
 	defer cache.Close()
 
@@ -218,6 +223,7 @@ func TestMemoryCache_Delete(t *testing.T) {
 }
 
 func TestMemoryCache_Exists(t *testing.T) {
+	defer Init()()
 	cache := NewMemoryCache()
 	defer cache.Close()
 
@@ -260,7 +266,7 @@ func TestMemoryCache_Exists(t *testing.T) {
 }
 
 func TestFileCache_SetAndGet(t *testing.T) {
-	defer clearTestFile()
+	defer Init()()
 	cache, err := NewFileCache(testFilePath)
 	if err != nil {
 		t.Fatalf("创建文件缓存失败: %v", err)
@@ -289,7 +295,7 @@ func TestFileCache_SetAndGet(t *testing.T) {
 }
 
 func TestFileCache_Delete(t *testing.T) {
-	defer clearTestFile()
+	defer Init()()
 	cache, err := NewFileCache(testFilePath)
 	if err != nil {
 		t.Fatalf("创建文件缓存失败: %v", err)
@@ -319,7 +325,7 @@ func TestFileCache_Delete(t *testing.T) {
 	}
 }
 func TestFileCache_Expire(t *testing.T) {
-	defer clearTestFile()
+	defer Init()()
 	cache, err := NewFileCache(testFilePath)
 	if err != nil {
 		t.Fatalf("创建文件缓存失败: %v", err)
@@ -345,7 +351,7 @@ func TestFileCache_Expire(t *testing.T) {
 }
 
 func TestMultiCache_SetAndGet(t *testing.T) {
-	defer clearTestFile()
+	defer Init()()
 	memoryCache := NewMemoryCache()
 	fileCache, _ := NewFileCache(testFilePath)
 	cache := NewMultiCache(memoryCache, fileCache)
@@ -373,6 +379,7 @@ func TestMultiCache_SetAndGet(t *testing.T) {
 }
 
 func TestUseOneCacheOfRedis(t *testing.T) {
+	defer Init()()
 	cc, err := NewCache(CacheConfig{
 		Type:          RedisCacheType,
 		RedisAddr:     redisUrl,
@@ -414,6 +421,7 @@ func TestUseOneCacheOfRedis(t *testing.T) {
 }
 
 func TestUseOneCacheOfFile(t *testing.T) {
+	defer Init()()
 	cc, err := NewCache(CacheConfig{
 		Type:    FileCacheType,
 		FileDir: testFilePath,

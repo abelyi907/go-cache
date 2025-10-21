@@ -1,6 +1,8 @@
 package go_cache
 
-import "os"
+import (
+	"os"
+)
 
 var redisServer = new(RedisCache)
 var redisUrl = "localhost:36379"
@@ -10,6 +12,12 @@ var testFilePath = "./test_cache"
 
 func init() {
 	redisServer = NewRedisCache(redisUrl, redisPassword, redisDb)
+}
+func Init() func() {
+	clearTestFile()
+	return func() {
+		clearTestFile()
+	}
 }
 
 // 每次测试结束后，清理测试文件

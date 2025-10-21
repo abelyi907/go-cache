@@ -416,7 +416,7 @@ func TestUseOneCacheOfRedis(t *testing.T) {
 func TestUseOneCacheOfFile(t *testing.T) {
 	cc, err := NewCache(CacheConfig{
 		Type:    FileCacheType,
-		FileDir: "./test_cache",
+		FileDir: testFilePath,
 	})
 	if err != nil {
 		t.Error(err)

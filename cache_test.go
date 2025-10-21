@@ -439,20 +439,4 @@ func TestUseOneCacheOfFile(t *testing.T) {
 		t.Error("set cache3 error")
 	}
 
-	//
-	//if cc.Set("test2", "test2_1", time.Second*120) != nil {
-	//	t.Error("set cache error")
-	//}
-	//rsp, err = cc.Get("test2")
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//if rsp != "test2_1" {
-	//	t.Error("get cache error")
-	//}
-
-	//if cc.Delete("test2") != nil {
-	//	t.Error("delete cache error")
-	//}
-
 }

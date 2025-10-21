@@ -54,7 +54,7 @@ import (
 
 func main() {
     // 创建Redis缓存实例
-    cache := go_cache.NewRedisCache("localhost:6379", "", 0)
+    cache := go_cache.NewRedisCache("localhost:6379", "", 0,"")
     defer cache.Close()
 
     // 设置键值对，过期时间10秒
@@ -126,6 +126,7 @@ redisConfig := go_cache.CacheConfig{
     RedisAddr:     "localhost:6379",
     RedisPassword: "",
     RedisDB:       0,
+    Prefix:       "go-cache:",
 }
 redisCache, _ := go_cache.NewCache(redisConfig)
 

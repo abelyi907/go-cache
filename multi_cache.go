@@ -19,7 +19,7 @@ func NewMultiCache(caches ...Cache) *MultiCache {
 // Set 将键值对存储到所有缓存中，并设置过期时间
 func (m *MultiCache) Set(key string, value interface{}, expiration time.Duration) error {
 	for _, cache := range m.caches {
-		err := cache.Set(key, value, expiration)
+		err := cache.Set(key, ToString(value), expiration)
 		if err != nil {
 			// 记录错误但继续设置其他缓存
 			// 在实际应用中，可能需要更好的错误处理机制

@@ -42,7 +42,7 @@ func (m *MemoryCache) Set(key string, value interface{}, expiration time.Duratio
 	}
 
 	m.data[key] = &cacheItem{
-		value:      value.(string),
+		value:      ToString(value),
 		expiration: expirationTime,
 	}
 

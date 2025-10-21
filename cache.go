@@ -32,7 +32,7 @@ func NewRedisCache(addr string, password string, db int, PrefixKey string) *Redi
 
 // Set 将键值对存储到缓存中，并设置过期时间
 func (r *RedisCache) Set(key string, value interface{}, expiration time.Duration) error {
-	return r.client.Set(r.ctx, r.prefixKey+key, value, expiration).Err()
+	return r.client.Set(r.ctx, r.prefixKey+key, ToString(value), expiration).Err()
 }
 
 // Get 从缓存中获取指定键的值
